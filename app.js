@@ -20,7 +20,7 @@ mongoose.connect(config.MONGODB_URI)
 })
 
 app.use(cors())
-//app.use(express.static('build')) //<--front build index
+app.use(express.static('build')) //<--front build index
 app.use(express.json())
 app.use(middlewares.requestLogger)
 
