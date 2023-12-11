@@ -16,15 +16,15 @@ const saveMoviesToDatabase = async (movies) => {
 and saves it to mongodb*/
 moviesRouter.get('/fetch-popular', async (req, res) => {
   try {
-    const moviesData = await fetchMovieData('/movie/popular'); // Adjust the endpoint as necessary
+    const moviesData = await fetchMovieData('/movie/popular') // Adjust the endpoint as necessary
     const updatedMoviesData = transformMovieData(moviesData.results) //transform data to desired format
     await saveMoviesToDatabase(updatedMoviesData)
     res.json(updatedMoviesData)
   } catch (error) {
-    console.error('Failed to fetch & save movie data:', error);
-    res.status(500).send('Error fetching movie data');
+    console.error('Failed to fetch & save movie data:', error)
+    res.status(500).send('Error fetching movie data')
   }
-});
+})
 
 //HTTP GET ALL REQUEST
 moviesRouter.get('/', (request, response) => {

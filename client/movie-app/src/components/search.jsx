@@ -2,7 +2,7 @@ import { TextField, InputAdornment, IconButton } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import '../App.css'
 
-const SearchBar = ({ onSearch }) => {
+const SearchBar = () => {
 
   
     return (

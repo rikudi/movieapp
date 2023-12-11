@@ -6,5 +6,5 @@ const TMDB_KEY = process.env.TMDB_API_KEY
 const TMDB_URI = process.env.TMDB_URI
 
 module.exports = {
-    PORT, MONGODB_URI, TMDB_KEY, TMDB_URI
+  PORT, MONGODB_URI, TMDB_KEY, TMDB_URI
 }
