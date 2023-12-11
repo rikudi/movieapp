@@ -1,0 +1,113 @@
+* {
+  font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.body {
+  background-image: linear-gradient(
+  315deg,
+  hsl(251deg 64% 16%) 0%,
+  hsl(269deg 60% 19%) 8%,
+  hsl(284deg 56% 22%) 15%,
+  hsl(297deg 53% 24%) 23%,
+  hsl(309deg 53% 29%) 31%,
+  hsl(318deg 53% 34%) 38%,
+  hsl(326deg 53% 40%) 46%,
+  hsl(335deg 53% 46%) 54%,
+  hsl(347deg 53% 51%) 62%,
+  hsl(1deg 60% 57%) 69%,
+  hsl(14deg 68% 55%) 77%,
+  hsl(26deg 71% 53%) 85%,
+  hsl(37deg 71% 49%) 92%,
+  hsl(48deg 74% 46%) 100%
+  );
+  min-height: 125vh;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: rgb(232, 255, 170);
+  font-weight: 100;
+}
+
+.horizontalScroll {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+
+  /* Optional: hide scrollbar for aesthetic purposes 
+  &::-webkit-scrollbar {
+    display: none;
+  } */
+
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* MovieCard css */
+.movie-card {
+  width: 100%;
+  margin: auto;
+  position: relative;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow for depth */
+  border-radius: 2px; /* Rounded corners */
+  overflow: hidden; /* Ensures the content respects border radius */
+}
+
+.movie-poster {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.movie-title {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.582); /* Semi-transparent overlay */
+  color: white;
+  text-align: center;
+  padding: 4px;
+  font-size: 1rem;
+}
+
+.slider {
+  width: 77%;
+  margin-top: 5px;
+  margin-bottom: 75px;
+}
+
+.slider-title {
+  margin: 10px;
+}
+
+.search-field {
+  width: 50vw;
+  background-color: rgba(47, 79, 79, 0.349);
+  color: white;
+}
+
+.navbar-container {
+  background-color: rgb(47, 56, 79);
+  margin-bottom: 25px;
+}
+
+.navbar {
+  background-color: rgb(47, 56, 79);
+}
+
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .movie-title {
+    font-size: 0.9rem; /* Adjust font size for smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .movie-title {
+    font-size: 0.8rem; /* Even smaller font size for very small screens */
+  }
+}
