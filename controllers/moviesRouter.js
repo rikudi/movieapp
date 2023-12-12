@@ -1,6 +1,7 @@
 const moviesRouter = require('express').Router()
 const Movie = require('../models/mongo')
-const { fetchMovieData, transformMovieData } = require('./movieAPI')
+const logger = require('../utils/logger')
+const { fetchMovieData, transformMovieData, fetchSearchData, fetchTMDBData } = require('./movieAPI')
 
 //function that saves multiple movies to database
 const saveMoviesToDatabase = async (movies) => {
@@ -31,6 +32,19 @@ moviesRouter.get('/', (request, response) => {
   Movie.find({}).then(movie => {
     response.json(movie)
   })
+})
+
+//HTTP TMDB GET REQUEST ON SEARCH TERM
+moviesRouter.get('/search', async (req, res) => {
+  try {
+    const searchTerm = req.query.title
+    const data = await fetchTMDBData('/search/movie', {query: searchTerm}) //connect to endpoint with searchTerm as query
+    const newData = transformMovieData(data.results) //get the data and remove unwanted attributes
+    console.log(newData)
+    res.json(newData)
+  } catch (error) {
+    res.status(500).send('Error fetching data from TMDB: ' + error.message)
+  }
 })
 
 //HTTP GET REQUEST BY ID

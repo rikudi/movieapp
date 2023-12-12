@@ -1,19 +1,7 @@
 import Slider from 'react-slick';
 import '../App.css'
+import {MovieCard} from './movieCard'
 
-//movie card component
-const MovieCard = ({ movie }) => {
-    return (
-      <div className="movie-card">
-        <img 
-          src={`https://image.tmdb.org/t/p/w500${movie.posterPath}`} 
-          alt={movie.title} 
-          className="movie-poster"
-        />
-        <div className="movie-title">{movie.title}</div>
-      </div>
-    );
-  };
 //movie carousel component
 const MovieCarousel = ({ movies }) => {
   const settings = {

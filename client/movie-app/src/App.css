@@ -22,7 +22,7 @@
   hsl(37deg 71% 49%) 92%,
   hsl(48deg 74% 46%) 100%
   );
-  min-height: 125vh;
+  min-height: 200vh;
   height: auto;
   display: flex;
   flex-direction: column;
@@ -83,10 +83,39 @@
   margin: 10px;
 }
 
+
+/*SEARCH*/
+.search-container {
+  display: flex;
+  flex-wrap: wrap; /* Add this to allow items to wrap to the next line */
+  width: 66%;
+  margin-top: 10px;
+  padding: 10px;
+  background-color: rgba(47, 79, 79, 0.349);
+  min-height: 85vh;
+  justify-content: space-evenly;
+  align-items: flex-start;
+}
+
+.search-item {
+  width: 150px;
+  height: auto; /* Adjust height as needed, or set a fixed height */
+  margin: 5px;
+  flex: 0 0 auto; /* Prevents the item from growing or shrinking */
+}
+
 .search-field {
   width: 50vw;
   background-color: rgba(47, 79, 79, 0.349);
   color: white;
+}
+
+.search-movie-title {
+  position: relative;
+  width: 100%;
+  color: white;
+  text-align: start;
+  font-size: 1rem;
 }
 
 .navbar-container {
