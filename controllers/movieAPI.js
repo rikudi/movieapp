@@ -52,7 +52,6 @@ const fetchTMDBData = async (endpoint, params = {}) => {
         ...params
       }
     })
-    console.log(response)
     return response.data
   } catch(error) {
     console.error('Error connecting to TMDB API:', error)
