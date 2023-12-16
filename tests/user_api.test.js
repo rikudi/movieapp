@@ -88,14 +88,85 @@ describe('USER_API', () => {
 })
 
 describe('MOVIE_API', () => {
-  test('movie can be added to collection by authorized user', async () => {
-    const requestData = { tmdbId: 55234 }
+  beforeAll(async () => {
+    //format users
+    await User.deleteMany({})
+    //make new test user
+    const testUser = {
+      username: 'rikurdi',
+      name: 'riku kaartoaho',
+      password: 'Secret123!'
+    }
+
     await api
-      .post('/api/movies')
-      .send(requestData)
+      .post('/api/users')
+      .send(testUser)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+  })
+  let token
+  test('user can log in with correct credentials', async () => {
+    const users = await helper.usersInDb()
+    console.log('USERS IN DB ', users)
+    const loginData = {username: 'rikurdi', password: 'Secret123!'}
+    //login with login data
+    const response = await api
+      .post('/api/login')
+      .send(loginData)
       .expect(200)
       .expect('Content-Type', /application\/json/)
+
+    token = response.body.token
   })
+
+  test('movie can be added to collection by authorized user', async () => {
+    const tmdbId = 55234
+    await api
+      .post('/api/movies')
+      .set('Authorization', `Bearer ${token}`)
+      .send({tmdbId})
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+    
+    const user = await User.findOne({username: 'rikurdi'})
+    console.log('collection: ' + user.collection)
+  })
+
+  test('movie cannot be added to collection by unauthorized user', async () => {
+    const tmdbId = 55234
+    await api
+      .post('/api/movies')
+      .set('Authorization', 'Bearer wrongtoken_asdasdsadasd23123123')
+      .send({tmdbId})
+      .expect(401)
+      .expect('Content-Type', /application\/json/)
+    
+    const user = await User.findOne({username: 'rikurdi'})
+    console.log('collection: ' + user.collection)
+  })
+
+  test('returns 404 Not found if incorrect id paramater', async () => {
+    const tmdbId = 55232 //<-- incorrect movie id
+    await api
+      .delete(`/api/movies/${tmdbId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(404)
+      .expect('Content-Type', /application\/json/)
+  })
+
+  test('movie can be deleted from collection if id is found', async () => {
+    const tmdbId = 55234 //<-- correct movie id
+    await api
+      .delete(`/api/movies/${tmdbId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    const user = await User.findOne({username: 'rikurdi'})
+    console.log('collection after deletion: ' + user.collection)
+  })
+  
   afterAll(() => {
     mongoose.connection.close()
   })

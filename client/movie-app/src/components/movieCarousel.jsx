@@ -1,4 +1,4 @@
-import Slider from 'react-slick';
+import Slider from 'react-slick'
 import '../App.css'
 import {MovieCard} from './movieCard'
 
@@ -15,43 +15,43 @@ const MovieCarousel = ({ movies }) => {
     pauseOnHover: true,
     lazyLoad: true,
     responsive: [
-        {
-          breakpoint: 1024,
-          settings: {
-            slidesToShow: 3,
-            slidesToScroll: 3,
-            infinite: true,
-            dots: true
-          }
-        },
-        {
-          breakpoint: 600,
-          settings: {
-            slidesToShow: 2,
-            slidesToScroll: 2,
-            initialSlide: 2
-          }
-        },
-        {
-          breakpoint: 480,
-          settings: {
-            slidesToShow: 1,
-            slidesToScroll: 1
-          }
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+          dots: true
         }
-      ]
-  };
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2
+        }
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1
+        }
+      }
+    ]
+  }
 
   return (
     <>
-        <div className='slider-title'>
-            <h1>Popular right now:</h1>
-        </div>
-            <Slider {...settings} className='slider' >
-                {movies.map(movie => (
-                    <MovieCard key={movie.id} movie={movie} />
-                ))}
-            </Slider>
+      <div className='slider-title'>
+        <h1>Popular right now:</h1>
+      </div>
+      <Slider {...settings} className='slider' >
+        {movies.map(movie => (
+          <MovieCard key={movie.id} movie={movie} />
+        ))}
+      </Slider>
     </>
   )
 }

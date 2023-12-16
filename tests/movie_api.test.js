@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const bcrypt = require('bcrypt')
 const Movie = require('../models/movie')
 const helper = require('../utils/helper')
 const supertest = require('supertest')
@@ -38,8 +37,6 @@ describe('MOVIE_API', () => {
   })
 
   test('Movies can be fetched from database with status 200 OK', async () => {
-    const moviesAtStart = await helper.moviesInDb()
-
     await api
       .get('/api/movies')
       .expect(200)

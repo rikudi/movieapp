@@ -5,7 +5,7 @@ const logger = require('../utils/logger')
 const middlewares = require('../utils/middlewares')
 const jwt = require('jsonwebtoken')
 const config = require('../utils/config')
-const { fetchMovieData, transformMovieData, fetchSearchData, fetchTMDBData } = require('./movieAPI')
+const { fetchMovieData, transformMovieData, fetchTMDBData } = require('./movieAPI')
 
 //function that saves multiple movies to database
 const saveMoviesToDatabase = async (movies) => {
@@ -37,7 +37,7 @@ moviesRouter.get('/', async (request, response) => {
   response.json(movies)
 })
 
-//HTTP TMDB GET REQUEST ON SEARCH TERM
+//HTTP TMDB GET REQUEST by title
 moviesRouter.get('/search', async (req, res) => {
   try {
     const searchTerm = req.query.title
@@ -49,23 +49,48 @@ moviesRouter.get('/search', async (req, res) => {
     res.status(500).send('Error fetching data from TMDB: ' + error.message)
   }
 })
+//HTTP TMDB GET REQUEST by id
+moviesRouter.get('/movie/:id', async (req, res) => {
+  try {
+    const movieId = req.params.id;
+    const movieData = await fetchTMDBData(null, {}, movieId);
+    console.log(movieData);
+    res.json(movieData);
+  } catch (error) {
+    res.status(500).send('Error fetching movie details from TMDB: ' + error.message);
+  }
+});
 
-//HTTP GET REQUEST BY ID -- needs rework
-moviesRouter.get('/:id', (request, response, next) => {
-  Movie.findById(request.params.id)
-    .then(movie => {
-      if (movie) {
-        response.json(movie)
-      } else {
-        response.status(404).end()
-      }
-    })
-    .catch(error => next(error))
+//fetch the user movie id's
+moviesRouter.get('/collection', async (request, response, next) => {
+  try {
+    console.log('request body', request.body)
+    const decodedToken = jwt.verify(request.token, config.SECRET)
+            //check if id matches the data
+            if(!decodedToken.id) {
+              return response.status(401).json({error: 'invalid token'})
+            }
+            //find user from database using id attribute provided by the decodedToken and store it to user
+            const user =  await User.findById(decodedToken.id)
+            console.log(user)
+            if(!user) {
+              return response.status(404).json({error: 'user not found'})
+            }
+    
+            const userCollection = user.collection
+            return response.status(200).json(userCollection)
+      } catch(error) {
+      console.error(error)
+      next(error)
+    }
 })
+
 //HTTP POST TO MOVIE COLLECTION
 moviesRouter.post('/', async (request, response, next) => {
   try {
-    const {tmdbId} = request.body
+    console.log('request body:', request.body)
+    const data = request.body
+    console.log(data.id)
     console.log('request token: ', request.token)
     //decode user id and name from access token
     const decodedToken = jwt.verify(request.token, config.SECRET)
@@ -81,13 +106,13 @@ moviesRouter.post('/', async (request, response, next) => {
       return response.status(404).json({error: 'user not found'})
     }
     // Check if the tmdbId already exists in the user's collection
-    const movieExists = user.collection.some(movie => movie.tmdbId === tmdbId)
+    const movieExists = user.collection.some(movie => movie.id === data.id)
     if (movieExists) {
       return response.status(400).json({ error: 'Movie already in collection' })
     }
 
     //add TMDB movieid to user collection
-    user.collection.push({ tmdbId: tmdbId, addedAt: new Date()})
+    user.collection.push(data)
     await user.save()
     response.status(201).json(user)
   } catch (error) {

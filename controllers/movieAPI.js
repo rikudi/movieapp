@@ -25,22 +25,12 @@ const transformMovieData = (movies) => {
       overview: movie.overview,
       popularity: movie.popularity,
       originalLanguage: movie.original_language,
-      posterPath: movie.poster_path
+      posterPath: movie.poster_path,
+      id: movie.id
     }
   })
 }
-//delete this?
-const fetchSearchData = async (endpoint) => {
-  try {
-    console.log('fetching data from tmdb ', endpoint)
-    const url = `${config.TMDB_URI}${endpoint}?api_key=${config.TMDB_KEY}`
-    const response = await axios.get(url)
-    return response.data
-  }  catch(error) {
-    console.error('error connecting to API ', error)
-    throw error
-  } 
-}
+
 //function that fetch data from TMDB based on endpoint and parameters
 const fetchTMDBData = async (endpoint, params = {}) => {
   try {
@@ -59,4 +49,4 @@ const fetchTMDBData = async (endpoint, params = {}) => {
   }
 }
 
-module.exports = {fetchMovieData, transformMovieData, fetchSearchData, fetchTMDBData}
+module.exports = {fetchMovieData, transformMovieData, fetchTMDBData}

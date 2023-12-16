@@ -14,6 +14,7 @@ usersRouter.post('/', async (request, response, next) => {
   const {username, name, password} = request.body
 
   if(!helper.validatePassword(password)) {
+    console.log('Invalid password requirements')
     return response.status(400).json({error: 'invalid password requirements'})
   }
   //hash password

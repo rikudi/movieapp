@@ -18,13 +18,7 @@ const userSchema = new mongoose.Schema({
     default: 0
   },
   collection: [
-    {
-      tmdbId: 
-      {
-        type: Number,
-        addedAt: { type: Date, default: Date.now }
-      }
-    }
+  
   ]
 })
 userSchema.plugin(uniqueValidator)

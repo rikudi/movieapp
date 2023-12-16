@@ -10,15 +10,19 @@ loginRouter.post('/', async (request, response) => {
 
   //find username from database, or null
   const user = await User.findOne({username})
+  console.log("user found: ", user)
   const passwordCorrect = user === null
     ? false
     : await bcrypt.compare(password, user.passwordHash)
 
-  //if user && pw return false, error
-  if(!(user && passwordCorrect)) {
+  // If user && password return false, error
+  if (!(user && passwordCorrect)) {
+    const errorMessage = 'Invalid username or password';
+    console.log(`Login error: ${errorMessage}, Status: 401`);
+    
     return response.status(401).json({
-      error: 'invalid username or password'
-    })
+      error: errorMessage
+    });
   }
 
   //user data used for token generation
@@ -26,8 +30,8 @@ loginRouter.post('/', async (request, response) => {
     username: user.username,
     id: user._id
   }
-  //generate unique access token for user using secret
-  const token = jwt.sign(userForToken, config.SECRET)
+  //generate unique access token for user using secret, 60min timelimit
+  const token = jwt.sign(userForToken, config.SECRET, {expiresIn: 60*60})
 
   response
     .status(200)
